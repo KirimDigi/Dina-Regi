@@ -5253,7 +5253,7 @@
                           <div id="audio-container" class="audio-box">
                             <audio id="song" loop="">
                               <source
-                                src="https://ourinvidigi.com/wp-content/uploads/2026/03/Sasak-Rajamandala-karaoke-Sunda-dan-lirik.mp3"
+                                src="./wp-content/uploads/2026/03/sabilulungan-final.mp3"
                                 type="audio/mp3"
                               />
                             </audio>
@@ -6022,6 +6022,41 @@
           });
         }
       });
+    </script>
+    <script>
+      // Segmen lagu Sabilulungan: mulai 0:20, berhenti 5:46, kembali ke 0:20
+      (function () {
+        var SONG_START = 20; // 0:20
+        var SONG_END = 346; // 5:46
+        var song = document.getElementById("song");
+        if (!song) return;
+        song.loop = false;
+        song.removeAttribute("loop");
+        function seekStart() {
+          try {
+            song.currentTime = SONG_START;
+          } catch (e) {}
+        }
+        song.addEventListener("loadedmetadata", function () {
+          if (song.currentTime < SONG_START) seekStart();
+        });
+        // Klik BUKA UNDANGAN: mulai dari 0:20
+        if (window.jQuery) {
+          jQuery("#wdp-button-wrapper").on("click", "button", function () {
+            seekStart();
+          });
+        }
+        // Kunci segmen 0:20 - 5:46, lalu putar ulang dari 0:20
+        song.addEventListener("timeupdate", function () {
+          if (song.currentTime >= SONG_END || song.currentTime < SONG_START - 1) {
+            seekStart();
+          }
+        });
+        song.addEventListener("ended", function () {
+          seekStart();
+          song.play().catch(function () {});
+        });
+      })();
     </script>
   </body>
 </html>
